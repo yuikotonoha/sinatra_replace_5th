@@ -1,0 +1,38 @@
+<% provide(:title, "#{@post.title}の内容を編集") %>
+<div class="icon text-center">
+  <h1><%= @post.title %>の内容を編集</h1>
+</div>
+
+<%= form_for @post, url: post_path(@post), html: { method: :patch } do |f| %>
+  <!-- タイトル -->
+  <div class="form-group row">
+    <label class="col-md-3 col-form-label" for="title">タイトル</label>
+    <div class="col-md-9">
+      <%= f.text_field :title %>
+    </div>
+  </div>
+  <!-- 投稿内容 -->
+  <div class="form-group row">
+    <label class="col-md-3 col-form-label" for="category">カテゴリを選択</label>
+    <div class="col-md-9">
+      <%= select :post, :category, [["化粧品・メイク道具", "化粧品・メイク道具"], ["服", "服"], ["ウィッグ", "ウィッグ"]] %>
+    </div>
+  </div>
+  <!-- 画像を選択 -->
+  <div class="form-group row">
+    <label class="col-md-3 col-form-label" for="product_image">商品画像を選択</label>
+    <div class="col-md-9">
+      <%= image_tag @post.product_image_url(:thumb), :class => "mb-2", :width => "200" %>
+      <%= f.file_field :product_image %>
+    </div>
+  </div>
+  <!-- 商品へのリンク -->
+  <div class="form-group row">
+    <label class="col-md-3 col-form-label" for="product_link">商品リンク</label>
+    <div class="col-md-9">
+      <%= url_field("post", "product_link", :size=>"60") %>
+      <%#= text_area :post, :product_link, :size=>"40x4" %>
+    </div>
+  </div>
+  <input type="submit" value="内容を送信">
+<% end %>

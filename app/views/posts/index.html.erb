@@ -1,0 +1,38 @@
+<%= image_tag("header.jpg", :width => "100%", :alt => "化粧品・服・ウィッグの口コミを投稿しよう！") %>
+<% if logged_in? %>
+
+  <%= search_form_for @q do |f| %>
+    <%#= f.search_field :title_cont %>
+    <%= f.collection_select(:category_cont, @category, :category, :category, :include_blank => true) %>
+    <%= f.submit %>
+  <% end %>
+
+  <div class="row show_images text-center">
+    <% @posts.each do |post| %>
+      <div class="col-xl-4 col-md-6 col-sm-12">
+        <!-- Content -->
+
+        <%= link_to post_path(post), class: "nav-item nav-link" do %>
+          <%= image_tag post.product_image_url(:thumb) %>
+        <% end %>
+        <p>投稿者:<%= post.user.nickname %></p>
+      </div>
+    <% end %>
+  </div>
+
+<% else %>
+  <div class="row mt-3 top_lp">
+    <div class="col-6">
+      <!-- Content -->
+      <button type="button" class="btn btn-success mx-auto" width="80%">
+        <%= link_to "新規登録", new_user_path, class: 'nav-item nav-link' %>
+      </button>
+    </div>
+    <div class="col-6 text-center">
+      <!-- Content -->
+      <button type="button" class="btn btn-primary mx-auto" width="80%">
+        <%= link_to "ログイン", login_path, class: 'nav-item nav-link' %>
+      </button>
+    </div>
+  </div>
+<% end %>

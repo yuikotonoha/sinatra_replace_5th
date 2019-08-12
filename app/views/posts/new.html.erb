@@ -1,0 +1,40 @@
+<% provide(:title, "投稿画面") %>
+<div class="text-center">
+  <h2>投稿画面</h2>
+</div>
+
+<%= form_for @post, method: :post do |f| %>
+  <!-- タイトル -->
+  <div class="form-group row">
+    <label class="col-md-3 col-form-label" for="title">タイトル</label>
+    <div class="col-md-9">
+      <%= f.text_field :title %></p>
+    </div>
+  </div>
+  <!-- 投稿内容 -->
+  <div class="form-group row">
+    <label class="col-md-3 col-form-label" for="category">カテゴリを選択</label>
+    <div class="col-md-9">
+      <%= select :post, :category, [["化粧品・メイク道具", "化粧品・メイク道具"], ["服", "服"], ["ウィッグ", "ウィッグ"]] %>
+    </div>
+  </div>
+  <!-- 画像を選択 -->
+  <div class="form-group row">
+    <label class="col-md-3 col-form-label" for="product_image">商品画像を選択</label>
+    <div class="col-md-9">
+      <%= f.file_field :product_image %>
+    <!--<input type="file" name="product_image" id="product_image" class="file_choice" required>-->
+    </div>
+  </div>
+  <!-- 商品へのリンク -->
+<!--  <div class="form-group row">-->
+<!--    <label class="col-md-3 col-form-label" for="product_link">商品リンク</label>-->
+<!--    <div class="col-md-9">-->
+<!--      <textarea type="product_link" name="product_link" id="product_link" rows="4" cols="40" placeholder="URLを入力"></textarea>-->
+<!--    </div>-->
+<!--  </div>-->
+
+  <input type="submit" value="内容を送信">
+<% end %>
+
+<a href="/">キャンセル</a>

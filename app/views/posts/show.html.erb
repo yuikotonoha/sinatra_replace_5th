@@ -1,0 +1,119 @@
+<% provide(:title, "#{@post.title}") %>
+<div class="text-center mt-5 mb-5">
+  <h2>アイテム詳細情報</h2>
+</div>
+
+<div class="row p-3">
+  <div class="col-md-4">
+    <div class="product_detail text-center">
+      <%= image_tag @post.product_image_url(:thumb) %>
+      <p class="like"><%= link_to "♥", "/likes/#{@post.id}" %><%= @like_count %></p>
+
+    </div>
+  </div>
+  <div class="col-md-8">
+    <h3 class="pt-3 pb-3 text-center"><%= @post.title %></h3>
+    <p class="text-center">カテゴリ：<%= @post.category %></p>
+    <p class="text-center">投稿者：<%= @post.user.nickname %></p>
+    <div class="buttons text-center mb-3">
+      <%= link_to @post.product_link, class: "btn btn-lg btn-outline-warning" do %>
+        <i class="fab fa-amazon"></i>Amazonで詳しく見る
+      <% end %>
+    </div>
+    <div class="buttons text-center">
+      <% if @like_check.nil? %>
+        <%= link_to "お気に入り登録", "/likes/#{@post.id}", :class => "btn btn-lg btn-outline-success far fa-heart" %>
+      <% else %>
+        <%= link_to "/likes/#{@post.id}", :class => "btn btn-lg btn-success" do %>
+          <i class="fas fa-heart"></i>お気に入り登録中
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<% @comments.each do |comment| %>
+  <div class="row posts" id="<%= comment['comment_id'] %>">
+    <div class="col-md-2 posts-user">
+      <%= link_to user_path(comment.user_id) do %>
+        <%= image_tag comment.user.image_url(:thumb), :size => "100x100" %>
+      <% end %>
+      <p><%= comment.user.nickname %></p>
+    </div>
+    <div class="col-md-6 mb-3">
+      <div class=" posts-content">
+
+        <p>口コミ投稿日時：<%= comment.created_at.strftime("%Y/%m/%d(#{%w(日 月 火 水 木 金 土)[comment.created_at.wday]}) %H:%M") %></p>
+        <h4 class="mb-3">評価：<%= comment.score %>点</h4>
+        <p><%= simple_format(comment.comment_text) %></p>
+        <% unless comment.comment_image.blank? %>
+          <img width="200px" src="<%= comment.comment_image %>" type="button" data-toggle="modal" data-target="#exampleModalScrollable<%= comment.id %>" style="cursor: pointer">
+          <!-- Modal -->
+          <div class="modal" id="exampleModalScrollable<%= comment.id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalCenteredLabel">口コミ写真</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <img width="350px" src="<%= comment.comment_image %>">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Modal END -->
+        <% end %>
+      </div>
+    </div>
+    <% if comment.user_id == current_user.id %>
+      <div class="col-md-12 edit-button">
+        <div class="comment_delete">
+          <button type="button" class="btn btn-secondary">
+            <%= link_to '口コミを編集', edit_comment_path(comment), class: "btn btn-default"  %>
+          </button>
+          <button type="button" class="btn btn-secondary">
+            <%= link_to '口コミを削除', comment_path(comment), class: "btn btn-default", method: :delete, data: {confirm: "口コミを削除しますか?"}  %>
+          </button>
+        </div>
+      </div>
+    <% end %>
+    <div class="col-md-12 edit-button">
+    </div>
+  </div>
+<% end %>
+
+<div class="text-center mt-5 mb-5">
+  <h2>口コミ投稿する</h2>
+</div>
+
+<%= form_for @comment, method: :post do |f| %>
+  <!-- 評価 -->
+  <div class="form-group row">
+    <label class="col-md-3 col-form-label" for="score">評価</label>
+    <div class="col-md-9">
+      <%= select :comment, :score, [["5", "5"], ["4", "4"], ["3", "3"], ["2", "2"], ["1", "1"]] %>
+    </div>
+  </div>
+  <!-- 口コミ内容 -->
+  <div class="form-group row">
+    <label class="col-md-3 col-form-label" for="comment_text">口コミ内容</label>
+    <div class="col-md-9">
+      <%= text_area :comment, :comment_text, :size=>"40x5" %>
+    </div>
+  </div>
+  <!-- 口コミ画像 -->
+  <div class="form-group row">
+    <label class="col-md-3 col-form-label" for="comment_image">口コミ画像</label>
+    <div class="col-md-9">
+      <%= f.file_field :comment_image %>
+    </div>
+  </div>
+  <input type="submit" value="内容を送信">
+<% end %>

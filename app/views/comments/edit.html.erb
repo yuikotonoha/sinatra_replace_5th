@@ -1,0 +1,28 @@
+<% provide(:title, "口コミ編集する") %>
+<div class="text-center mt-5 mb-5">
+  <h2>口コミ編集する</h2>
+</div>
+<%= form_for @comment, method: :patch do |f| %>
+  <!-- 評価 -->
+  <div class="form-group row">
+    <label class="col-md-3 col-form-label" for="score">評価</label>
+    <div class="col-md-9">
+      <%= select :comment, :score, [["5", "5"], ["4", "4"], ["3", "3"], ["2", "2"], ["1", "1"]] %>
+    </div>
+  </div>
+  <!-- 口コミ内容 -->
+  <div class="form-group row">
+    <label class="col-md-3 col-form-label" for="comment_text">口コミ内容</label>
+    <div class="col-md-9">
+      <%= text_area :comment, :comment_text, :size=>"40x5" %>
+    </div>
+  </div>
+  <!-- 口コミ画像 -->
+  <div class="form-group row">
+    <label class="col-md-3 col-form-label" for="comment_image">口コミ画像</label>
+    <div class="col-md-9">
+      <%= f.file_field :comment_image %>
+    </div>
+  </div>
+  <input type="submit" value="内容を送信">
+<% end %>
