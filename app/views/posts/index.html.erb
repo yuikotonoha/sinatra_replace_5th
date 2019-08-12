@@ -3,14 +3,14 @@
 
 <% if logged_in? %>
   <!--ページネーション ※絞り込み検索と現時点で併用不可-->
-  <%= will_paginate %>
+  <%#= will_paginate %>
   <!--ページネーション ※絞り込み検索と現時点で併用不可-->
 
   <!--  絞り込み検索 ※ページネーションと現時点で併用不可--->
-  <%#= search_form_for @q do |f| %>
-    <%#= f.collection_select(:category_cont, @category, :category, :category, :include_blank => true) %>
-    <%#= f.submit %>
-  <%# end %>
+  <%= search_form_for @q do |f| %>
+    <%= f.collection_select(:category_cont, @category, :category, :category, :include_blank => true) %>
+    <%= f.submit %>
+  <% end %>
   <!--  絞り込み検索 ※ページネーションと現時点で併用不可--->
 
   <div class="row show_images text-center">
@@ -26,7 +26,7 @@
     <% end %>
   </div>
   <!--ページネーション 絞り込み検索と現時点で併用不可-->
-  <%= will_paginate %>
+  <%#= will_paginate %>
   <!--ページネーション ※絞り込み検索と現時点で併用不可-->
 
 <% else %>

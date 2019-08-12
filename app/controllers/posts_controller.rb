@@ -2,19 +2,19 @@ class PostsController < ApplicationController
 
   # 商品一覧を取得しインスタンス変数に代入
   # ページネーションを使うならこっちをコメントアウト外す
-  def index
-    @posts = Post.paginate(page: params[:page], per_page: 6)
-  end
+  # def index
+  #   @posts = Post.paginate(page: params[:page], per_page: 6)
+  # end
 
 
   # Ransack用index
   # 検索機能を使うならこっちをコメントアウト外す
-  # def index
-  #   @q = Post.ransack(params[:q])
-  #   @posts = @q.result(distinct: true)
-  #   @category = Post.group(:category)
-  #   # binding.pry
-  # end
+  def index
+    @q = Post.ransack(params[:q])
+    @posts = @q.result(distinct: true)
+    @category = Post.group(:category)
+    # binding.pry
+  end
 
 
   # 商品を検索
@@ -30,10 +30,10 @@ class PostsController < ApplicationController
     @comment = Comment.new
 
     # お気に入りしているか判定
-    # @like_check = Like.find_by(post_id: cookies[:post_id], user_id: current_user.id)
+    @like_check = Like.find_by(post_id: cookies[:post_id], user_id: current_user.id)
 
     # お気に入りの数をカウント
-    # @like_count = Like.where(post_id: params[:id]).count
+    @like_count = Like.where(post_id: params[:id]).count
 
     #今見ている商品の口コミが投稿された場合、comment_controllerにpost_idを渡すための処理
     cookies[:post_id] = params[:id]

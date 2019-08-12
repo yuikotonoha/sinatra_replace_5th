@@ -10,7 +10,7 @@ class UsersController < ApplicationController
   before_action :admin_user,     only: :destroy
 
   def index
-    @users = User.paginate(page: params[:page], per_page: 3)
+    @users = User.paginate(page: params[:page], per_page: 3) #1ページに表示させるユーザーは3人までと指定
   end
 
   def show
