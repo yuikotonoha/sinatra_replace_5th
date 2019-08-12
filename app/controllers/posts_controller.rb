@@ -1,18 +1,20 @@
 class PostsController < ApplicationController
 
   # 商品一覧を取得しインスタンス変数に代入
-  # def index
-  #   @posts = Post.all
-  # end
+  # ページネーションを使うならこっちをコメントアウト外す
+  def index
+    @posts = Post.paginate(page: params[:page], per_page: 6)
+  end
 
 
   # Ransack用index
-  def index
-    @q = Post.ransack(params[:q])
-    @posts = @q.result(distinct: true)
-    @category = Post.group(:category)
-    # binding.pry
-  end
+  # 検索機能を使うならこっちをコメントアウト外す
+  # def index
+  #   @q = Post.ransack(params[:q])
+  #   @posts = @q.result(distinct: true)
+  #   @category = Post.group(:category)
+  #   # binding.pry
+  # end
 
 
   # 商品を検索

@@ -1,11 +1,17 @@
 <%= image_tag("header.jpg", :width => "100%", :alt => "化粧品・服・ウィッグの口コミを投稿しよう！") %>
-<% if logged_in? %>
 
-  <%= search_form_for @q do |f| %>
-    <%#= f.search_field :title_cont %>
-    <%= f.collection_select(:category_cont, @category, :category, :category, :include_blank => true) %>
-    <%= f.submit %>
-  <% end %>
+
+<% if logged_in? %>
+  <!--ページネーション ※絞り込み検索と現時点で併用不可-->
+  <%= will_paginate %>
+  <!--ページネーション ※絞り込み検索と現時点で併用不可-->
+
+  <!--  絞り込み検索 ※ページネーションと現時点で併用不可--->
+  <%#= search_form_for @q do |f| %>
+    <%#= f.collection_select(:category_cont, @category, :category, :category, :include_blank => true) %>
+    <%#= f.submit %>
+  <%# end %>
+  <!--  絞り込み検索 ※ページネーションと現時点で併用不可--->
 
   <div class="row show_images text-center">
     <% @posts.each do |post| %>
@@ -19,6 +25,9 @@
       </div>
     <% end %>
   </div>
+  <!--ページネーション 絞り込み検索と現時点で併用不可-->
+  <%= will_paginate %>
+  <!--ページネーション ※絞り込み検索と現時点で併用不可-->
 
 <% else %>
   <div class="row mt-3 top_lp">
@@ -36,3 +45,5 @@
     </div>
   </div>
 <% end %>
+
+
