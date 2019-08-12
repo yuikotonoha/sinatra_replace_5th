@@ -28,3 +28,96 @@
     <% end %>
   <% end %>
 </div>
+
+<!-- タブボタン部分 -->
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a href="#tab1" class="nav-link" data-toggle="tab">フォロー<span class="badge badge-secondary"><%= @follow_count%></sppan></a>
+  </li>
+  <li class="nav-item">
+    <a href="#tab2" class="nav-link" data-toggle="tab">フォロワー<span class="badge badge-secondary"><%= @follower_count %></span></a>
+  </li>
+  <li class="nav-item">
+    <a href="#tab3" class="nav-link" data-toggle="tab">お気に入り<span class="badge badge-secondary"><%= @like_count %></span></a>
+  </li>
+  <!--  今見ているユーザーが、currentuserなのか判定-->
+  <% if current_user.id.to_s == params[:id] %>
+    <li class="nav-item">
+      <a href="#tab4" class="nav-link" data-toggle="tab">タイムライン</a>
+    </li>
+  <% end %>
+</ul>
+
+<!--タブのコンテンツ部分-->
+<div class="tab-content">
+  <div id="tab1" class="tab-pane active">
+    <% @follow_list.each do |follow_user| %>
+      <div class="follow_user_image p-2">
+        <%= link_to user_path(follow_user), class: "nav-item nav-link" do %>
+          <%= image_tag follow_user.image_url(:thumb), :width => "75" %>
+          <%= follow_user.nickname %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <div id="tab2" class="tab-pane">
+    <% @follower_list.each do |follower_user| %>
+      <div class="follow_user_image p-2">
+        <%= link_to user_path(follower_user), class: "nav-item nav-link" do %>
+          <%= image_tag follower_user.image_url(:thumb), :width => "75" %>
+          <%= follower_user.nickname %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <div id="tab3" class="tab-pane">
+    <% @like_list.each do |like_post| %>
+      <div class="follow_user_image p-2">
+        <%= link_to post_path(like_post), class: "nav-item nav-link" do %>
+          <%= image_tag like_post.product_image_url(:thumb), :width => "75" %>
+          <%= like_post.title %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <!-- フォローした人の投稿をタイムラインとして表示 -->
+  <div id="tab4" class="tab-pane row">
+    <% @post_list.each do |post| %>
+      <div class="follow_user_image p-2">
+        <div class="d-inline-block align-middle">
+          <%= link_to user_path(post.user_id) do %>
+            <%= image_tag post.user.image_url(:thumb), :width => "75" %>
+            <p><%= post.user.nickname %></p>
+          <% end %>
+        </div>
+        <%= link_to post_path(post) do %>
+          <div class="balloon1-left">
+            <p>投稿日：<%= post.created_at.strftime("%Y/%m/%d(#{%w(日 月 火 水 木 金 土)[post.created_at.wday]}) %H:%M") %></p>
+            <p><%= post.title %></p>
+            <%= image_tag post.product_image_url(:thumb), :width => "75" %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+</div>
+
+<!-- 投稿一覧 -->
+<div class="text-center mt-5 mb-5">
+  <h2><%= @user.nickname %>の投稿一覧</h2>
+</div>
+<div class="row show_images text-center">
+  <% @posts.each do |post| %>
+    <div class="col-xl-4 col-md-6 col-sm-12 mb-5">
+      <h3><%= post.title %></h3>
+      <%= link_to post_path(post), class: "nav-item nav-link" do %>
+        <%= image_tag post.product_image_url(:thumb) %>
+      <% end %>
+      <% if current_user.id.to_s == params[:id] %>
+        <%= link_to '編集', edit_post_path(post)  %>：
+        <%= link_to '削除', post_path(post), method: :delete, data: {confirm: "投稿を削除しますか?"}  %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
