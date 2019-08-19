@@ -1,5 +1,9 @@
 class PostsController < ApplicationController
 
+  #ログインしていないユーザーへのアクセス制限
+  before_action :logged_in_user, only: [:create, :destroy]
+
+
   # 商品一覧を取得しインスタンス変数に代入
   # ページネーションを使うならこっちをコメントアウト外す
   # def index
@@ -56,8 +60,7 @@ class PostsController < ApplicationController
       flash[:success] = '女装アイテムを投稿しました'
       redirect_to root_path
     else
-      flash[:danger] = '女装アイテムの投稿に失敗しました'
-      redirect_to root_path
+      render 'new'
     end
   end
 
